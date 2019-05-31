@@ -14,7 +14,7 @@ function getCtx (selector) {
 function Toast(options) {
     const { selector = '#toast' } = options;
     const ctx = getCtx(selector);
-
+  console.log(selector)
     ctx.handleShow(options);
 }
 

@@ -1,4 +1,5 @@
-// pages/address/address.js
+const { $Toast } = require('../../iview/dist/base/index');
+
 Page({
 
   /**
@@ -28,11 +29,7 @@ Page({
    * Lifecycle function--Called when page load
    */
   onLoad: function (options) {
-    console.log(options)
-    wx.setNavigationBarTitle({
-      title: '收货地址'  //修改title
-    });
-
+    wx.setNavigationBarTitle({ title: '收货地址' });
     if (options.isOrder) {
       this.setData({
         isFromOrder: true
@@ -41,19 +38,21 @@ Page({
   },
 
   /**
-   * Lifecycle function--Called when page is initially rendered
-   */
-  onReady: function () {
-
-  },
-
-  /**
    * Lifecycle function--Called when page show
    */
   onShow: function () {
-
+    this.onLoad
+    this.onReady()
   },
 
+  onReady: function () {
+    if (!this.data.hasUserInfo) {
+      $Toast({
+        content: '请先登录',
+        type: 'warning'
+      })
+    }
+  },
   /**
    * Lifecycle function--Called when page hide
    */

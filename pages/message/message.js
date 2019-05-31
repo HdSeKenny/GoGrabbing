@@ -1,3 +1,4 @@
+const { $Toast } = require('../../iview/dist/base/index');
 const app = getApp()
 
 Page({
@@ -35,6 +36,7 @@ Page({
    * Lifecycle function--Called when page load
    */
   onLoad: function (options) {
+    wx.setNavigationBarTitle({ title: '消息' })
     if (!app.globalData.userInfo) {
       return this.setData({
         hasUserInfo: false
@@ -76,8 +78,16 @@ Page({
    */
   onShow: function () {
     this.onLoad()
+    this.onReady()
   },
-
+  onReady: function () {
+    if (!this.data.hasUserInfo) {
+      $Toast({
+        content: '请先登录',
+        type: 'warning'
+      })
+    }
+  },
   /**
    * Lifecycle function--Called when page hide
    */
