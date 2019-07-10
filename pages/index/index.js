@@ -1,5 +1,4 @@
-//index.js
-//获取应用实例
+const { GoodService } = require('../../services/index')
 const app = getApp()
 
 Page({
@@ -29,20 +28,16 @@ Page({
       title: '首页'
     })
 
-    wx.request({
-      url: "https://www.cnqiangba.com/goodsku/findOnlookByCategory",
-      method: 'POST',
-      data: {
-        categoryId: 1,
-        pageNum: 1,
-        pageSize: 20,
-        status: 1
-      },
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      success: (res) => {
-        const goods = res.data.data;
+    const goodsParams = {
+      categoryId: 1,
+      pageNum: 1,
+      pageSize: 20,
+      status: 1
+    }
+
+    GoodService.getGoodsList(goodsParams)
+      .then((data) => {
+        const goods = data;
         goods[goods.length] = {
           "id": 55,
           "createTime": "2019-01-24 16:31:19",
@@ -81,11 +76,10 @@ Page({
         this.setData({ goods }, () => {
           this.calculateCountDownTime()
         })
-      },
-      fail: function (err) {
-        console.log(err)
-      }
-    })
+      })
+      .catch((err) => {
+        console.log(err.toString())
+      })
   },
   calculateCountDownTime: function () {
     const goods = this.data.goods;

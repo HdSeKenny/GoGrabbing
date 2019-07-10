@@ -1,5 +1,5 @@
-<!--logs.wxml-->
 <view class="container detail-page">
+  <i-toast id="toast" />
   <view class="good-detail">
     <view class="image">
       <swiper class='detail-swiper' autoplay='true' interval="3000" bindtap="bindDetailTap">

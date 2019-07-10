@@ -9,6 +9,22 @@ App({
     // 登录
     wx.login({
       success: res => {
+        wx.request({
+          url: `http://127.0.0.1:3000/code2session`,
+          method: 'POST',
+          data: {
+            code: res.code
+          },
+          header: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          success: (res) => {
+            console.log(res.data.data)
+          },
+          fail: (err) => {
+            console.log(err)
+          }
+        })
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
       }
     })

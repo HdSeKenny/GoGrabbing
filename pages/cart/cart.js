@@ -1,4 +1,5 @@
-const { $Toast } = require('../../iview/dist/base/index');
+const { Toast } = require('../../utils/util.js')
+const { GoodService } = require('../../services/index')
 const app = getApp()
 
 Page({
@@ -64,30 +65,27 @@ Page({
     if (!app.globalData.userInfo) {
       return this.setData({
         hasUserInfo: false
+      }, () => {
+        Toast.warning('请先登录')
       })
     }
-    wx.request({
-      url: "https://www.cnqiangba.com/wechat/order/findMyonlookRecord",
-      method: 'POST',
-      data: {
+    else if (options) {
+      GoodService.getCartGoods({
         openid: 1,
         // userId: 1,
         pageSize: 1,
         pageNum: 20
-      },
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      success: (res) => {
-        console.log(res.data)
-        // this.setData({
-        //   orders: res.data.data
-        // })
-      },
-      fail: function (err) {
-        console.log(err)
-      }
-    })
+      })
+      .then(data => {
+        this.setData({
+          hasUserInfo: true,
+          // orders: data
+        })
+      })
+      .catch(err => {
+        Toast.error(err.toString())
+      })
+    }
   },
 
   bindDetailTap: function (e) {
@@ -97,15 +95,11 @@ Page({
     })
   },
   onShow: function() {
-    this.onLoad()
-    this.onReady()
-  },
-  onReady: function() {
-    if (!this.data.hasUserInfo) {
-      $Toast({
-        content: '请先登录',
-        type: 'warning'
-      })
-    }
+    this.onLoad({
+      openid: 1,
+      // userId: 1,
+      pageSize: 1,
+      pageNum: 20
+    })
   }
 })

@@ -1,27 +1,22 @@
+const { Toast } = require('../../utils/util.js')
+const { GoodService } = require('../../services/index')
+const app = getApp()
 
 Page({
   data: {
-    good: null
+    good: null,
+    hasUserInfo: true
   },
   onLoad: function (options) {
-    wx.setNavigationBarTitle({
-      title: '详细'  //修改title
-    })
-    wx.request({
-      url: "https://www.cnqiangba.com/goodsku/findGoodSkuDetail",
-      method: 'POST',
-      data: options,
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      success: (res) => {
-        const good = res.data.data
-        this.findGoodOnlook(options, good)
-      },
-      fail: function (err) {
-        console.log(err)
-      }
-    })
+    wx.setNavigationBarTitle({ title: '详细' })
+    if (options) {
+      GoodService.getGoodDetail(options).then((data) => {
+        this.findGoodOnlook(options, data)
+      })
+      .catch(err => {
+        Toast.error(err.toString())
+      })
+    }
   },
   handleCheckoutOriginalPrice: function(e) {
     const gId = e.currentTarget.dataset.id
@@ -31,6 +26,9 @@ Page({
   },
 
   handleCheckoutLookerPrice: function (e) {
+    if (!app.globalData.userInfo) {
+      return Toast.warning('请先登录')
+    }
     const gId = e.currentTarget.dataset.id
     wx.navigateTo({
       url: `../order/order?id=${gId}&isLooker=1`
@@ -38,15 +36,9 @@ Page({
   },
 
   findGoodOnlook: function (options, detailGood){
-    wx.request({
-      url: "https://www.cnqiangba.com/wechat/onlook/findGoodOnlook",
-      method: 'POST',
-      data: options,
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      success: (res) => {
-        const good = res.data.data
+    GoodService.findGoodOnlook(options)
+      .then(data => {
+        const good = data
         const newGood = Object.assign({}, detailGood, good)
         newGood.swiperImgs = detailGood.imagePath.split(',')
 
@@ -54,17 +46,16 @@ Page({
         const now = new Date().getTime();
         const tmp = deadline - now;
         newGood.isGrabbing = tmp <= 0;
-    
+
         this.setData({ good: newGood }, () => {
           if (!newGood.isGrabbing) {
             this.calculateCountDownTime()
           }
         })
-      },
-      fail: function (err) {
-        console.log(err)
-      }
-    })
+      })
+      .catch(err => {
+        Toast.error(err.toString())
+      })
   },
 
   calculateCountDownTime: function () {
@@ -84,6 +75,10 @@ Page({
       }
       this.setData({ good })
     }, 1000);
+  },
+
+  onShow: function() {
+    this.onLoad()
   },
 
   bindDetailTap: function (e) {

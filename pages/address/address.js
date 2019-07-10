@@ -1,4 +1,6 @@
-const { $Toast } = require('../../iview/dist/base/index');
+const { Toast } = require('../../utils/util.js')
+const { UserService } = require('../../services/index')
+const app = getApp()
 
 Page({
 
@@ -7,6 +9,7 @@ Page({
    */
   data: {
     isFromOrder: false,
+    hasUserInfo: true,
     addresses: [
       {
         id: 1,
@@ -30,7 +33,15 @@ Page({
    */
   onLoad: function (options) {
     wx.setNavigationBarTitle({ title: '收货地址' });
-    if (options.isOrder) {
+    if (!app.globalData.userInfo) {
+      return this.setData({
+        hasUserInfo: false
+      }, () => {
+        // Toast.warning('请先登录')
+      })
+    }
+
+    if (options && options.isOrder) {
       this.setData({
         isFromOrder: true
       });
@@ -41,16 +52,13 @@ Page({
    * Lifecycle function--Called when page show
    */
   onShow: function () {
-    this.onLoad
+    this.onLoad()
     this.onReady()
   },
 
   onReady: function () {
     if (!this.data.hasUserInfo) {
-      $Toast({
-        content: '请先登录',
-        type: 'warning'
-      })
+      Toast.warning('请先登录')
     }
   },
   /**
