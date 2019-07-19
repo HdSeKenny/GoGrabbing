@@ -17,26 +17,32 @@
     "pages/user-details/user-details"
   ],
   "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#EC5D29",
     "list": [
       {
         "pagePath": "pages/index/index",
         "iconPath": "public/images/homepage_out.png",
-        "selectedIconPath": "public/images/homepage_on.png"
+        "selectedIconPath": "public/images/homepage_on.png",
+        "text": "首页"
       },
       {
         "pagePath": "pages/cart/cart",
         "iconPath": "public/images/cart_out.png",
-        "selectedIconPath": "public/images/cart_in.png"
+        "selectedIconPath": "public/images/cart_in.png",
+        "text": "购物车"
       },
       {
         "pagePath": "pages/message/message",
         "iconPath": "public/images/message_out.png",
-        "selectedIconPath": "public/images/message_on.png"
+        "selectedIconPath": "public/images/message_on.png",
+        "text": "消息"
       },
       {
         "pagePath": "pages/me/me",
         "iconPath": "public/images/my_out.png",
-        "selectedIconPath": "public/images/my_on.png"
+        "selectedIconPath": "public/images/my_on.png",
+        "text": "我的"
       }
     ]
   },

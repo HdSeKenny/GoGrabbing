@@ -37,7 +37,7 @@ Page({
 
     GoodService.getGoodsList(goodsParams)
       .then((data) => {
-        const goods = data;
+        const goods = data.records;
         goods[goods.length] = {
           "id": 55,
           "createTime": "2019-01-24 16:31:19",
@@ -51,7 +51,7 @@ Page({
           "currentprice": 6538.11,
           "redlineprice": 6300.11,
           "lastCalcPriceTime": "2019-04-02 02:36:00",
-          "beginTime": "2019-05-05 09:53:40",
+          "beginTime": "2019-08-05 09:53:40",
           "timespan": 5,
           "downprice": 1,
           "lookercount": 1,
@@ -66,16 +66,18 @@ Page({
           "lockgoodnum": 0
         }
 
-        goods.forEach((g) => {
-          const deadline = new Date(g.beginTime).getTime();
-          const now = new Date().getTime();
-          const tmp = deadline - now;
-          g.isGrabbing = tmp <= 0;
-        })
+        if (goods && goods.length) {
+          goods.forEach((g) => {
+            const deadline = new Date(g.beginTime).getTime();
+            const now = new Date().getTime();
+            const tmp = deadline - now;
+            g.isGrabbing = tmp <= 0;
+          })
 
-        this.setData({ goods }, () => {
-          this.calculateCountDownTime()
-        })
+          this.setData({ goods }, () => {
+            this.calculateCountDownTime()
+          })
+        }
       })
       .catch((err) => {
         console.log(err.toString())
@@ -86,7 +88,6 @@ Page({
     goods.forEach((g) => {
       if (!g.isGrabbing) {
         this[`timeInterval_${g.skuid}`] = setInterval(() => {
-          // console.log('- - - - ')
           const deadline = new Date(g.beginTime).getTime();
           const now = new Date().getTime();
           const tmp = deadline - now;
