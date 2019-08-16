@@ -11,7 +11,7 @@
     <view class="detail">
       <view class="good-tag" wx:if="{{good.isGrabbing && good.orderno && good.onlookRecordNo}}">正在开抢</view>
       <p class="brand-name">{{good.brandName}}</p>
-      <i-grid i-class="no-border"><i-grid-item i-class="detail-text">{{good.detail}}</i-grid-item></i-grid>
+      <i-grid i-class="no-border"><i-grid-item i-class="detail-text">{{good.subtitle}}</i-grid-item></i-grid>
       <view class="btn-row" wx:if="{{!good.orderno && !good.onlookRecordNo}}">
         <i-button bind:click="handleClick" i-class="status-btn disabled" shape="circle" size="small" disabled>抢购结束</i-button>
       </view>

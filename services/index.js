@@ -21,7 +21,7 @@ const $http = {
 const GoodService = {
   getGoodsList: (data) => $http.post('/goodsku/findOnlookByCategory', data),
   getGoodDetail: (data) => $http.post('/goodsku/findGoodSkuDetail', data),
-  findGoodOnlook: (data) => $http.post('/wechat/onlook/findGoodOnlook', data),
+  findGoodOnlook: (data) => $http.post('/goodsku/findGoodOnlook', data),
   getCartGoods: (data) => $http.post('/wechat/order/findMyonlookRecord', data)
 }
 
